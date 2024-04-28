@@ -1,13 +1,16 @@
 import { TestBed } from '@angular/core/testing';
 import { UsersService } from './users.service';
 import { UserInterface } from './user-interface';
+import { UtilsService } from './utils.service';
 
 describe('UsersService Testing', () => {
   let service: UsersService;
+  let utilsService: UtilsService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
     service = TestBed.inject(UsersService);
+    utilsService = TestBed.inject(UtilsService);
   });
 
   it('should be created', () => {
@@ -33,5 +36,11 @@ describe('UsersService Testing', () => {
     service.addUser(user);
     service.removeUser('6');
     expect(service.users).toEqual([]);
+  });
+
+  it('Should return foo', () => {
+    const user: UserInterface = { id: '6', name: 'Leticia' };
+    service.addUser(user);    
+    expect(service.getUsernames()).toEqual(['Leticia'])
   })
 });

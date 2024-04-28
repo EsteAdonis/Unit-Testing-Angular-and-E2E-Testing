@@ -1,10 +1,12 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { UserInterface } from './user-interface';
+import { UtilsService } from './utils.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsersService {
+  utilsService = inject(UtilsService);
   users: UserInterface[] = [];
 
   addUser(user: UserInterface): void {
@@ -16,4 +18,7 @@ export class UsersService {
     this.users = updatedUsers;
   }
 
+  getUsernames(): string[] {
+    return this.utilsService.pluck(this.users, 'name');
+  }
 }
