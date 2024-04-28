@@ -4,12 +4,12 @@ import { LoggerService } from '../Logger/logger.service';
 
 describe('CalculatorService', () => {
   let service: CalculatorService;
-  let loggerService: LoggerService;
+  let mockLoggerService: any;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    loggerService =TestBed.inject(LoggerService);
-    service = new CalculatorService(loggerService);
+    mockLoggerService = jasmine.createSpyObj('LoggerService', ['log']);
+    service = new CalculatorService(mockLoggerService);
   });
 
   it('should be created', () => {
@@ -19,12 +19,12 @@ describe('CalculatorService', () => {
   it('Should return the sum of two numbers', () => {
     let result = service.add(5, 15);
     expect(result).toEqual(20);
-    console.log('Messages: ' +loggerService.messages[0]);
+    expect(mockLoggerService.log).toHaveBeenCalledTimes(1);    
   });
 
   it('Should return the subtraction of two numbers', () => {
-    let result = service.subtract(15, 5);
+    let result = service.subtract(15, 5)
     expect(result).toBeGreaterThan(0);
-    console.log('Messages: ' +loggerService.messages[0]);    
+    expect(mockLoggerService.log).toHaveBeenCalledTimes(1);
   })
 });
