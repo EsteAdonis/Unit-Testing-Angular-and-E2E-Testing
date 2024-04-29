@@ -9,4 +9,8 @@ export class LoggerService {
   log(message: string): void {
     this.messages = [...this.messages, message];
   }
+
+  clear() {
+    this.messages = [];
+  }
 }
