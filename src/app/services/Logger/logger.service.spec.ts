@@ -13,4 +13,9 @@ describe('LoggerService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  it('Should add message throughout log method', () => {
+    service.log('Greeting Adonis Eros')
+    expect(service.messages.length).toBeGreaterThan(0);
+  })
 });
