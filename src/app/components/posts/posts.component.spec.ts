@@ -4,10 +4,17 @@ import { Post } from '../../models/Post';
 import { of } from 'rxjs';
 import { PostService } from '../../services/Post/post.service';
 
+class mockPostService {
+  getPost() { }
+  deletePost() { 
+    return of(true);
+  }
+}
+
 describe('PostsComponent', () => {
   let component: PostsComponent;
   let fixture: ComponentFixture<PostsComponent>;
-  let mockPostService: any;
+  let postService: any;
 
   let POSTS: Post[] = [
     { id: 1, body: 'body 1', title: 'title 1' },
@@ -16,22 +23,18 @@ describe('PostsComponent', () => {
   ];
 
   beforeEach(async () => {
-    mockPostService = jasmine.createSpyObj(['getPosts', 'deletePost']);    
-    mockPostService.deletePost.and.returnValue(of(true));    
-
     await TestBed.configureTestingModule({
       providers: [PostsComponent,
         {
           provide: PostService,
-          useValue: mockPostService   // it resolve the DJ because the mockPostService will be Injected in PostsComponent
+          useClass: mockPostService   // it resolve the DJ because the mockPostService will be Injected in PostsComponent
         }]
     })
     .compileComponents();
   
     fixture = TestBed.createComponent(PostsComponent);  // The component is create with the PostsComponent Injected
     component = fixture.componentInstance;
-    // fixture.detectChanges();
-    // component = new PostsComponent(mockPostService);
+    postService = TestBed.inject(PostService);
     component.posts = POSTS;    
   });
 
@@ -52,7 +55,8 @@ describe('PostsComponent', () => {
   })
 
   it('Should call the deletePost method in Post only once', () => {
+    spyOn(postService, 'deletePost').and.callThrough();
     component.delete(POSTS[1]);
-    expect(mockPostService.deletePost).toHaveBeenCalledTimes(1);
+    expect(postService.deletePost).toHaveBeenCalledTimes(1);
   });  
 });
